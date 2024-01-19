@@ -25,60 +25,7 @@ const Form = () => {
 		email: '',
 		password: ''
 	});
-
-	const handleChange = e => {
-		const { name, value } = e.target;
-		setForm({
-			...form,
-			[name]: value
-		});
-	};
-
-	const validateForm = () => {
-		let formErrors = {};
-
-		// Validate first name
-		if (!form.firstName.trim()) {
-			formErrors.firstName = 'First name is required';
-		} else if (!/^[a-zA-ZÀ-ÿ']+([-'][a-zA-ZÀ-ÿ']+)*$/.test(form.firstName)) {
-			formErrors.firstName = 'Invalid first name';
-		}
-
-		// Validate last name
-		if (!form.lastName.trim()) {
-			formErrors.lastName = 'Last name is required';
-		} else if (!/^[a-zA-ZÀ-ÿ']+([-'][a-zA-ZÀ-ÿ']+)*$/.test(form.lastName)) {
-			formErrors.lastName = 'Invalid last name';
-		}
-
-		// Validate email
-		if (!form.email.trim()) {
-			formErrors.email = 'Email is required';
-		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-			formErrors.email = 'Invalid email';
-		}
-
-		// Validate password
-		if (!form.password.trim()) {
-			formErrors.password = 'Password is required';
-		}
-
-		setErrors(formErrors);
-
-		// Return true if no errors, otherwise false
-		return Object.keys(formErrors).length === 0;
-	};
-
-	const handleSubmit = e => {
-		e.preventDefault();
-
-		if (validateForm()) {
-			// Perform form submission logic here
-			console.log('Form is valid. Send data:', form);
-		} else {
-			console.log('Form is invalid. Please correct the errors.');
-		}
-	};
+	console.log(form);
 
 	return (
 		<StyledTotalContainer>
@@ -92,15 +39,18 @@ const Form = () => {
 			</StyledContainerOfContainer>
 			<StyledContainerOfContainer>
 				<StyledBanner>Try it free 7 days then $20/mo. thereafter</StyledBanner>
-				<StyledForm onSubmit={handleSubmit}>
+				<StyledForm
+					onSubmit={() => {
+						handleSubmit(form);
+					}}
+				>
 					<StyledContainer>
 						<StyledInput
 							type='text'
 							id='firstName'
 							name='firstName'
 							placeholder='First Name'
-							value={form.firstName}
-							onChange={handleChange}
+							onChange={e => handleChange(e, form, setForm, setErrors)}
 						/>
 						<p>{errors.firstName}</p>
 					</StyledContainer>
@@ -112,7 +62,7 @@ const Form = () => {
 							name='lastName'
 							placeholder='Last Name'
 							value={form.lastName}
-							onChange={handleChange}
+							onChange={e => handleChange(e, form, setForm, setErrors)}
 						/>
 						<p>{errors.lastName}</p>
 					</StyledContainer>
@@ -124,7 +74,7 @@ const Form = () => {
 							name='email'
 							placeholder='Email'
 							value={form.email}
-							onChange={handleChange}
+							onChange={e => handleChange(e, form, setForm, setErrors)}
 						/>
 						<p>{errors.email}</p>
 					</StyledContainer>
@@ -136,7 +86,7 @@ const Form = () => {
 							name='password'
 							placeholder='Pasword'
 							value={form.password}
-							onChange={handleChange}
+							onChange={e => handleChange(e, form, setForm, setErrors)}
 						/>
 						<p>{errors.password}</p>
 					</StyledContainer>
@@ -146,6 +96,57 @@ const Form = () => {
 			</StyledContainerOfContainer>
 		</StyledTotalContainer>
 	);
+};
+const validateForm = (form, setErrors) => {
+	let formErrors = {};
+
+	// Validate first name
+	if (!form.firstName.trim()) {
+		formErrors.firstName = 'First name is required';
+	} else if (!/^[a-zA-ZÀ-ÿ']+([-'][a-zA-ZÀ-ÿ']+)*$/.test(form.firstName)) {
+		formErrors.firstName = 'Invalid first name';
+	}
+
+	// Validate last name
+	if (!form.lastName.trim()) {
+		formErrors.lastName = 'Last name is required';
+	} else if (!/^[a-zA-ZÀ-ÿ']+([-'][a-zA-ZÀ-ÿ']+)*$/.test(form.lastName)) {
+		formErrors.lastName = 'Invalid last name';
+	}
+
+	// Validate email
+	if (!form.email.trim()) {
+		formErrors.email = 'Email is required';
+	} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+		formErrors.email = 'Invalid email';
+	}
+
+	// Validate password
+	if (!form.password.trim()) {
+		formErrors.password = 'Password is required';
+	}
+
+	setErrors(formErrors);
+
+	return Object.keys(formErrors).length === 0;
+};
+
+const handleSubmit = (e, form) => {
+	if (validateForm()) {
+		console.log('Form is valid. Send data:', form);
+	} else {
+		console.log('Form is invalid. Please correct the errors.');
+	}
+};
+
+const handleChange = (e, form, setForm, setErrors) => {
+	const { name, value } = e.target;
+	setForm({
+		...form,
+		[name]: value
+	});
+
+	validateForm(form, setErrors);
 };
 
 export default Form;
