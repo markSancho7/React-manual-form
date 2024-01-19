@@ -1,3 +1,11 @@
 body {
 	font-family: sans-serif;
+	width: 1440px;
+	height: 100vh;
+	margin-inline: auto;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0px;
 }
